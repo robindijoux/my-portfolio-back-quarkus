@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.acme</groupId>
-    <artifactId>code-with-quarkus</artifactId>
+    
+    <!-- 🔧 À PERSONNALISER : Informations du projet -->
+    <groupId>com.rbndjx</groupId>
+    <artifactId>portfolio-api-quarkus</artifactId>
     <version>1.0.0-SNAPSHOT</version>
+    <name>Portfolio API Quarkus</name>
+    <description>Native Quarkus REST API for AWS Lambda</description>
 
     <properties>
         <compiler-plugin.version>3.14.0</compiler-plugin.version>
@@ -15,6 +19,7 @@
         <quarkus.platform.version>3.27.0</quarkus.platform.version>
         <skipITs>true</skipITs>
         <surefire-plugin.version>3.5.3</surefire-plugin.version>
+        <aws.sdk.version>2.29.40</aws.sdk.version>
     </properties>
 
     <dependencyManagement>
@@ -30,6 +35,7 @@
     </dependencyManagement>
 
     <dependencies>
+        <!-- Quarkus Core -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-arc</artifactId>
@@ -42,14 +48,70 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-rest-jackson</artifactId>
         </dependency>
+        
+        <!-- Database -->
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-amazon-lambda-http</artifactId>
+            <artifactId>quarkus-hibernate-orm-panache</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-jdbc-postgresql</artifactId>
+        </dependency>
+        
+        <!-- AWS SDK -->
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>s3</artifactId>
+            <version>${aws.sdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>cognitoidentityprovider</artifactId>
+            <version>${aws.sdk.version}</version>
+        </dependency>
+        
+        <!-- Security & JWT -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-smallrye-jwt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-smallrye-jwt-build</artifactId>
+        </dependency>
+        
+        <!-- OpenAPI / Swagger -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-smallrye-openapi</artifactId>
+        </dependency>
+        
+        <!-- Config -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-config-yaml</artifactId>
+        </dependency>
+        
+        <!-- Health Check -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-smallrye-health</artifactId>
         </dependency>
+        
+        <!-- Lambda support (optionnel) -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-amazon-lambda-http</artifactId>
+        </dependency>
+        
+        <!-- Validation -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-hibernate-validator</artifactId>
+        </dependency>
+        
+        <!-- Testing -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-junit5</artifactId>
@@ -58,6 +120,11 @@
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-junit5-mockito</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -120,6 +187,9 @@
     </build>
 
     <profiles>
+        <!-- ========================================= -->
+        <!-- 🏗️ NATIVE BUILD PROFILE -->
+        <!-- ========================================= -->
         <profile>
             <id>native</id>
             <activation>
@@ -131,6 +201,31 @@
                 <quarkus.package.jar.enabled>false</quarkus.package.jar.enabled>
                 <skipITs>false</skipITs>
                 <quarkus.native.enabled>true</quarkus.native.enabled>
+                
+                <!-- Native build optimizations -->
+                <quarkus.native.debug.enabled>${NATIVE_DEBUG_ENABLED:false}</quarkus.native.debug.enabled>
+                <quarkus.native.enable-reports>${NATIVE_ENABLE_REPORTS:false}</quarkus.native.enable-reports>
+            </properties>
+        </profile>
+        
+        <!-- ========================================= -->
+        <!-- 🔧 DEVELOPMENT PROFILE -->
+        <!-- ========================================= -->
+        <profile>
+            <id>dev</id>
+            <properties>
+                <quarkus.log.level>DEBUG</quarkus.log.level>
+            </properties>
+        </profile>
+        
+        <!-- ========================================= -->
+        <!-- 🚀 PRODUCTION PROFILE -->
+        <!-- ========================================= -->
+        <profile>
+            <id>prod</id>
+            <properties>
+                <quarkus.log.level>INFO</quarkus.log.level>
+                <quarkus.lambda.enable-polling-jvm-mode>false</quarkus.lambda.enable-polling-jvm-mode>
             </properties>
         </profile>
     </profiles>
