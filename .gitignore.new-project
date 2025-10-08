@@ -1,0 +1,128 @@
+# ============================================================================
+# 🚀 GITIGNORE POUR NOUVEAU PROJET QUARKUS LAMBDA
+# ============================================================================
+# Ce fichier remplacera .gitignore lors de l'initialisation du nouveau projet
+
+# === CONFIGURATION SENSIBLE ===
+.env
+.env.deployment
+.env.local
+.env.production
+*.env
+
+# Clés AWS (IMPORTANT!)
+*.pem
+*.key
+*-key.json
+aws-credentials
+
+# === BUILD MAVEN ===
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+.flattened-pom.xml
+
+# === IDE ===
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# Eclipse
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+.metadata
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.loadpath
+.recommenders
+
+# VS Code
+.vscode/
+.factorypath
+
+# NetBeans
+nb-configuration.xml
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# === SYSTÈME ===
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Windows
+Thumbs.db
+ehthumbs.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# === LOGS ===
+*.log
+logs/
+*.log.*
+log-*
+
+# === QUARKUS SPÉCIFIQUE ===
+# Dev mode
+.quarkus/
+/.quarkus/cli/plugins/
+quarkus.log
+
+# Native build
+*-runner
+*.so
+
+# === AWS ===
+.certs/
+*.pem
+
+# === DÉPLOIEMENT ===
+trust-policy.json
+deploy-*.log
+build-*.log
+
+# === BACKUP ET TEMP ===
+*.backup
+*.tmp
+*.temp
+*~
+*.orig
+*.rej
