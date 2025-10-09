@@ -49,7 +49,10 @@ public class ProjectService {
                 dto.featured
         );
 
-        // Handle media IDs
+        // Persister et flusher pour obtenir l'ID immédiatement
+        projectRepository.persistAndFlush(project);
+
+        // Handle media IDs - maintenant que le projet est persisté
         if (dto.media != null && !dto.media.isEmpty()) {
             for (String mediaId : dto.media) {
                 Media media = mediaRepository.findById(mediaId);
@@ -72,7 +75,6 @@ public class ProjectService {
             }
         }
 
-        projectRepository.persist(project);
         return toDTO(project);
     }
 
